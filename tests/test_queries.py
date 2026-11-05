@@ -139,7 +139,7 @@ def test_C3_not_exists(db):
 
 def test_C3_all(db):
     monday = [v for rid, sid, v in MEAS if sid == 5 and day(RUN[rid][4]) == "2026-11-02"]
-    exp = sorted(((RUN[rid][1], day(RUN[rid][4]), v) for rid, sid, v in MEAS if sid == 5 and v > max(monday)), key=lambda e: -e[2])
+    exp = sorted(((RUN[rid][1], day(RUN[rid][4]), v) for rid, sid, v in MEAS if sid == 5 and v > max(monday)), key=lambda e: (-e[2], e[0]))
     same(q(db, "C3_all_above_monday"), exp, tol=0.0005)
 
 

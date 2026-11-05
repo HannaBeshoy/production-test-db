@@ -11,4 +11,4 @@ WHERE m.spec_id = 5
                      INNER JOIN pt_test_runs r2 ON r2.run_id = m2.run_id
                      WHERE m2.spec_id = 5
                        AND TO_CHAR(r2.started_at, 'YYYY-MM-DD') = '2026-11-02')
-ORDER BY m.value DESC;
+ORDER BY m.value DESC, r.serial_no;
