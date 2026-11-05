@@ -1,0 +1,10 @@
+code,station,quantity,n,mean,sd,cpk
+CRU-200,LEAK-1,leak_rate,155,1.26,0.444,0.56
+CRU-200,EOL-1,noise,152,41.313,2.977,0.75
+BRG-6204,EOL-1,noise,207,35.871,2.689,0.76
+BRG-6204,EOL-1,run_out,207,4.412,1.496,0.8
+ACT-E40,TORQ-2,torque,102,4.093,0.119,0.82
+BRG-6204,VIS-1,seal_offset,202,1.974,14.697,0.86
+ACT-E40,EOL-2,stroke,102,12,0.183,0.91
+ACT-E40,EOL-2,current,102,2.189,0.139,0.93
+CRU-200,VIS-1,seal_offset,151,-1.83,16.898,0.95

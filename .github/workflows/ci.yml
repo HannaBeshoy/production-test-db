@@ -1,0 +1,48 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  postgres:
+    name: PostgreSQL 16 (through the Oracle-to-PostgreSQL translation)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: prodtest
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest -v tests
+        env:
+          PG_DSN: "host=localhost user=postgres password=ci dbname=prodtest"
+  oracle:
+    name: Oracle Database 23ai Free (the course's database)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      oracle:
+        image: gvenzl/oracle-free:23-slim
+        env:
+          ORACLE_PASSWORD: ci
+          APP_USER: prodtest
+          APP_USER_PASSWORD: prodtest
+        ports: ["1521:1521"]
+        options: --health-cmd healthcheck.sh --health-interval 10s --health-timeout 5s --health-retries 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest -v tests
+        env:
+          DB: oracle
+          ORACLE_DSN: "prodtest/prodtest@localhost:1521/FREEPDB1"
+      - run: python tools/runsql.py --oracle "prodtest/prodtest@localhost:1521/FREEPDB1" --csv oracle-results queries/*.sql
+      - uses: actions/upload-artifact@v4
+        with: {name: oracle-results, path: oracle-results/}
